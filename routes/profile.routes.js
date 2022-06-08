@@ -18,10 +18,10 @@ router.get("/profile/:userID", jwtVerify, (req, res) => {
 // save the changes after editing the user's information in the profile page
 
 router.post("/profile/:userID", jwtVerify, (req, res) => {
-  const { firstName, lastName, preferredName, email } = req.body
+  const { firstName, lastName, email } = req.body
   User.findByIdAndUpdate(
     req.params.userID,
-    { firstName, lastName, preferredName, email },
+    { firstName, lastName, email },
     { new: true }
   )
     .then((updatedUserInfo) => {

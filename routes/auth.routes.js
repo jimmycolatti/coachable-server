@@ -12,6 +12,7 @@ const generateToken = (id) => {
 // create an account
 
 router.post("/register", async (req, res) => {
+  console.log(req.body)
   const { email, password } = req.body
 
   if (!email || !password) {
@@ -56,7 +57,6 @@ router.post("/login", async (req, res) => {
         _id: user._id,
         firstName: user.firstName,
         lastName: user.lastName,
-        preferredName: user.preferredName,
         token,
       })
     } else res.status(400).json({ message: "Invalid Credentials" })
