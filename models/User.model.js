@@ -22,10 +22,12 @@ const userSchema = new Schema(
       minlength: 5,
       maxlength: 1000,
     },
-    team: {
-      type: Schema.Types.ObjectId,
-      ref: "Coachee",
-    },
+    team: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Coachee",
+      },
+    ],
   },
   {
     // this second object adds extra properties: `createdAt` and `updatedAt`
