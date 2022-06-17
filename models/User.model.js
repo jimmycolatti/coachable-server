@@ -28,6 +28,12 @@ const userSchema = new Schema(
         ref: "Coachee",
       },
     ],
+    sessions: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Session",
+      },
+    ],
   },
   {
     // this second object adds extra properties: `createdAt` and `updatedAt`

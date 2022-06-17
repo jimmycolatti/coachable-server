@@ -2,7 +2,10 @@ const { Schema, model } = require("mongoose")
 
 const coacheeSchema = new Schema(
   {
-    // profilePicture:
+    // img: {
+    //   data: Buffer,
+    //   conentType: String,
+    // },
     firstName: String,
     lastName: String,
     email: {
@@ -15,9 +18,15 @@ const coacheeSchema = new Schema(
       match: [/^\S+@\S+\.\S+$/, "Please use a valid email address"], //it can be here or in auth.routes
       lowercase: true,
     },
-    supervisor: {
-      type: Schema.Types.ObjectId,
-      ref: "User",
+    disciplinary: {
+      pep: {
+        type: Boolean,
+        default: false,
+      },
+      cap: {
+        type: Boolean,
+        default: false,
+      },
     },
   },
   {
