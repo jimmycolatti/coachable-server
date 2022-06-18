@@ -29,7 +29,7 @@ router.get("/sessions/:userID", jwtVerify, (req, res) => {
 
 router.post("/sessions/:userID", jwtVerify, (req, res) => {
   //   console.log("This is what the user added in the form: ", req.body)
-  const { date, coachee, notes, completed } = req.body
+  const { date, coachee, description, notes, completed } = req.body
   Session.create({ date, coachee, description, notes, completed })
     .then((newSessionFromDB) => {
       console.log("This is the new session: ", newSessionFromDB)
