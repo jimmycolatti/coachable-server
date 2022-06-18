@@ -9,6 +9,7 @@ const sessionSchema = new Schema(
         ref: "Coachee",
       },
     ],
+    description: String,
     notes: String,
     completed: {
       type: Boolean,

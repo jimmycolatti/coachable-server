@@ -28,25 +28,37 @@ router.get("/sessions/:userID", jwtVerify, (req, res) => {
 // ************************************************
 
 router.post("/sessions/:userID", jwtVerify, (req, res) => {
-  console.log("This is what the user added in the form: ", req.body)
+  //   console.log("This is what the user added in the form: ", req.body)
+  const { date, coachee, notes, completed } = req.body
+  Session.create({ date, coachee, description, notes, completed })
+    .then((newSessionFromDB) => {
+      console.log("This is the new session: ", newSessionFromDB)
+      User.findByIdAndUpdate(
+        req.params.userID,
+        { $push: { sessions: newSessionFromDB } },
+        { new: true }
+      ).then((updatedUserInfo) => {
+        res.status(200).json(newSessionFromDB)
+      })
+    })
+    .catch((err) =>
+      console.log("Error while saving a new session in the DB: ", err)
+    )
+})
 
-  //   const { date, coachee, notes, completed } = req.body
+// ************************************************
+// GET SESSION DETAILS ROUTE
+// ************************************************
 
-  //   Coachee.create({ firstName, lastName, email })
-  //     .then((newCoacheeFromDB) => {
-  //       console.log("This is the new coachee: ", newCoacheeFromDB)
-
-  //       User.findByIdAndUpdate(
-  //         req.params.userID,
-  //         { $push: { team: newCoacheeFromDB } },
-  //         { new: true }
-  //       ).then((updatedUserInfo) => {
-  //         res.status(200).json(newCoacheeFromDB)
-  //       })
-  //     })
-  //     .catch((err) =>
-  //       console.log("Error while saving a new coachee in the DB: ", err)
-  //     )
+router.get("/sessions/:userID/meeting/:sessionID", jwtVerify, (req, res) => {
+  Session.findById(req.params.sessionID)
+    .populate("coachee")
+    .then((sessionFromDB) => {
+      res.status(200).json(sessionFromDB)
+    })
+    .catch((err) =>
+      console.log("Error while getting session details from the DB: ", err)
+    )
 })
 
 module.exports = router
