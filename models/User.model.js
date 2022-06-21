@@ -3,9 +3,10 @@ const { Schema, model } = require("mongoose")
 // TODO: Please make sure you edit the user model to whatever makes sense in this case
 const userSchema = new Schema(
   {
-    // profilePicture:
+    imgURL: String,
     firstName: String,
     lastName: String,
+    googleId: String,
     email: {
       type: String,
       minlength: 5,
@@ -16,12 +17,12 @@ const userSchema = new Schema(
       match: [/^\S+@\S+\.\S+$/, "Please use a valid email address"], //it can be here or in auth.routes
       lowercase: true,
     },
-    password: {
-      type: String,
-      required: [true, "password is required"],
-      minlength: 5,
-      maxlength: 1000,
-    },
+    // password: {
+    //   type: String,
+    //   required: [true, "password is required"],
+    //   minlength: 5,
+    //   maxlength: 1000,
+    // },
     team: [
       {
         type: Schema.Types.ObjectId,

@@ -11,8 +11,9 @@ const { jwtVerify } = require("../middlewares/jwtVerify.middleware")
 
 router.get("/sessions/:userID", jwtVerify, (req, res) => {
   User.findById(req.params.userID)
-    .populate("sessions")
+    .populate({ path: "sessions", options: { sort: "date" } }) //ascending order, to make it descend add a - in front of 'date
     .populate("team")
+
     .then((userDetails) => {
       //   console.log(userDetails)
       res.status(200).json(userDetails)
@@ -58,6 +59,48 @@ router.get("/sessions/:userID/meeting/:sessionID", jwtVerify, (req, res) => {
     })
     .catch((err) =>
       console.log("Error while getting session details from the DB: ", err)
+    )
+})
+
+// ************************************************
+// POST ROUTE: SAVE CHANGES/EDITS MADE TO SESSION
+// ************************************************
+
+router.post("/sessions/:userID/meeting/:sessionID", jwtVerify, (req, res) => {
+  const { description, notes, completed } = req.body
+
+  Session.findByIdAndUpdate(
+    req.params.sessionID,
+    { description, notes, completed },
+    { new: true }
+  )
+    .then((updatedSessionFromDB) => {
+      res.status(201).json(updatedSessionFromDB)
+    })
+    .catch((err) => {
+      console.log(
+        "Error while saving the updates in the session to the DB: ",
+        err
+      )
+    })
+})
+
+// ************************************************
+// DELETE SESSION FROM DATABASE
+// ************************************************
+
+router.delete("/sessions/:userID/meeting/:sessionID", jwtVerify, (req, res) => {
+  Session.findByIdAndDelete(req.params.sessionID)
+    .then(() => {
+      User.findByIdAndUpdate(req.params.userID, {
+        $pullAll: { sessions: [req.params.sessionID] },
+      }).then((updatedUserInfo) => {
+        res.status(200).json(updatedUserInfo)
+      })
+    })
+
+    .catch((err) =>
+      console.log("Error while deleting a coachee from the DB: ", err)
     )
 })
 

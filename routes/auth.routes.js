@@ -53,7 +53,8 @@ router.post("/login", async (req, res) => {
     if (user && (await bcrypt.compare(password, user.password))) {
       const token = generateToken(user._id)
       res.status(200).json({
-        email,
+        imgURL: user.imgURL,
+        email: user.email,
         _id: user._id,
         firstName: user.firstName,
         lastName: user.lastName,
@@ -62,6 +63,44 @@ router.post("/login", async (req, res) => {
     } else res.status(400).json({ message: "Invalid Credentials" })
   } catch (error) {
     console.log(error)
+  }
+})
+
+// google authentication
+
+router.post("/google", async (req, res) => {
+  const { displayName, email, photoURL: imgURL, uid: googleId } = req.body
+
+  const [firstName, lastName] = displayName.split(" ")
+  const user = await User.findOne({ googleId })
+
+  if (user) {
+    const token = generateToken(user._id)
+    res.status(200).json({
+      imgURL: user.imgURL,
+      email: user.email,
+      _id: user._id,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      token,
+    })
+  } else {
+    const newUser = await User.create({
+      imgURL,
+      firstName,
+      lastName,
+      googleId,
+      email,
+    })
+    const token = generateToken(newUser._id)
+    res.status(200).json({
+      imgURL: newUser.imgURL,
+      email: newUser.email,
+      _id: newUser._id,
+      firstName: newUser.firstName,
+      lastName: newUser.lastName,
+      token,
+    })
   }
 })
 
