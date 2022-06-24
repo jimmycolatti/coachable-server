@@ -47,7 +47,7 @@ router.post("/team/:userID", jwtVerify, (req, res) => {
 
   Coachee.create({ firstName, lastName, email })
     .then((newCoacheeFromDB) => {
-      console.log("This is the new coachee: ", newCoacheeFromDB)
+      // console.log("This is the new coachee: ", newCoacheeFromDB)
 
       User.findByIdAndUpdate(
         req.params.userID,
@@ -81,11 +81,14 @@ router.get("/team/:userID/coachee/:coacheeID", jwtVerify, (req, res) => {
 // ************************************************
 
 router.post("/team/:userID/coachee/:coacheeID", jwtVerify, (req, res) => {
-  const { firstName, lastName, email } = req.body
+  const { firstName, lastName, email, disciplinary } = req.body
+
+  console.log()
 
   Coachee.findByIdAndUpdate(
     req.params.coacheeID,
-    { firstName, lastName, email },
+    { firstName, lastName, email, disciplinary },
+
     { new: true }
   )
     .then((updatedCoacheeFromDB) => {
