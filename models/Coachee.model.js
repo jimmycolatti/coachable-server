@@ -2,10 +2,7 @@ const { Schema, model } = require("mongoose")
 
 const coacheeSchema = new Schema(
   {
-    // img: {
-    //   data: Buffer,
-    //   conentType: String,
-    // },
+    imgURL: String,
     firstName: String,
     lastName: String,
     email: {

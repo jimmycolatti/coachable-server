@@ -10,7 +10,7 @@ const { jwtVerify } = require("../middlewares/jwtVerify.middleware")
 
 router.get("/team/:userID", jwtVerify, (req, res) => {
   User.findById(req.params.userID)
-    .populate("team")
+    .populate({ path: "team", options: { sort: "firstName" } })
     .then((userDetails) => {
       // console.log(userDetails)
       res.status(200).json(userDetails.team)
