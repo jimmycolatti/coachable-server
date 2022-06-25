@@ -52,6 +52,7 @@ router.post("/sessions/:userID", jwtVerify, (req, res) => {
 // ************************************************
 
 router.get("/sessions/:userID/meeting/:sessionID", jwtVerify, (req, res) => {
+  console.log("its working")
   Session.findById(req.params.sessionID)
     .populate("coachee")
     .then((sessionFromDB) => {
